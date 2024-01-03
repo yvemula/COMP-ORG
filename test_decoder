@@ -1,0 +1,44 @@
+`timescale 1ns / 1ps
+
+module test_decoder;
+    reg [15:0] instruction;
+    wire [3:0] opcode, reg1, reg2;
+    wire [4:0] immediate;
+
+    instruction_decoder uut(.instruction(instruction), .opcode(opcode), .reg1(reg1), .reg2(reg2), .immediate(immediate));
+
+    initial begin
+      	$dumpfile("dump.vcd");
+        $dumpvars;
+        // Test case for opcode 0001 (Load)
+        instruction = 16'b0001_0010_0011_0100; // Load instruction format
+        #10;
+
+        // Test case for opcode 0010 (Add)
+        instruction = 16'b0010_0100_0101_0110; // Add instruction format
+        #10;
+
+        // Test case for opcode 0011 (Store)
+        instruction = 16'b0011_0111_1000_1001; // Store instruction format
+        #10;
+
+        // Test case for opcode 0100 (Skip)
+        instruction = 16'b0100_1010_1011_1100; // Skip instruction format
+        #10;
+
+        // Test case for opcode 0101 (Jump)
+        instruction = 16'b0101_1101_1110_1111; // Jump instruction format
+        #10;
+
+        // Test case for opcode 0110 (Halt)
+        instruction = 16'b0110_0001_0001_0001; // Halt instruction format
+        #10;
+
+        #10 $finish; // End simulation after testing
+    end
+
+    initial begin
+        $monitor("Time = %d, Instruction = %h, Opcode = %b, Reg1 = %b, Reg2 = %b, Immediate = %b", 
+                 $time, instruction, opcode, reg1, reg2, immediate);
+    end
+endmodule
